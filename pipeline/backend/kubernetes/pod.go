@@ -185,7 +185,7 @@ func podSpec(step *types.Step, config *config, options BackendOptions, nsp nativ
 	hostUsers := options.HostUsers
 	// if the step hasn't explicitly requested to use or not use the host user
 	// namespace, default to the config
-	if hostUsers == nil && config.DisableHostUserns {
+	if hostUsers == nil && config.EnableUserNamespaces {
 		hostUsers = newBool(false)
 	}
 
@@ -636,7 +636,8 @@ func podSecurityContext(sc *SecurityContext, secCtxConf SecurityContextConfig, s
 		}
 
 		// only allow to set nonRoot if it's not set globally already or using user namespaces
-		if (nonRoot == nil || usingUserns) && sc.RunAsNonRoot != nil {
+		// and override is allowed
+		if (nonRoot == nil || (usingUserns && secCtxConf.OverrideNonRootInUserNamespaces)) && sc.RunAsNonRoot != nil {
 			nonRoot = sc.RunAsNonRoot
 		}
 

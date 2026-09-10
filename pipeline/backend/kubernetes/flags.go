@@ -127,9 +127,14 @@ var Flags = []cli.Flag{
 		Usage:   "`run as non root` Kubernetes security context option",
 	},
 	&cli.BoolFlag{
-		Sources: cli.EnvVars("WOODPECKER_BACKEND_K8S_DISABLE_HOST_USERNS"), // cspell:words userns
-		Name:    "backend-k8s-disable-host-userns",
+		Sources: cli.EnvVars("WOODPECKER_BACKEND_K8S_USER_NAMESPACES"),
+		Name:    "backend-k8s-user-namespaces",
 		Usage:   "default to running pods in a custom user namespace (i.e. `hostUsers: false`), where uid `0` is mapped to a non-root user on the host",
+	},
+	&cli.BoolFlag{
+		Sources: cli.EnvVars("WOODPECKER_BACKEND_K8S_USER_NAMESPACES_OVERRIDE_SECCTX_NONROOT"), // cspell:words secctx nonroot
+		Name:    "backend-k8s-user-namespaces-override-secctx-nonroot",
+		Usage:   "allow overriding the global run as non-root security context requirement for pods running in a custom user namespace",
 	},
 	&cli.StringSliceFlag{
 		Sources: cli.EnvVars("WOODPECKER_BACKEND_K8S_PULL_SECRET_NAMES"),
